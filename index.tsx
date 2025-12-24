@@ -1,22 +1,33 @@
 
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { AppProvider } from './context/AppContext';
-import AuthProvider from './context/AuthContext';
+import App from './App.tsx';
+import { AppProvider } from './context/AppContext.tsx';
+import AuthProvider from './context/AuthContext.tsx';
 
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
-}
+// Register React globally for libraries that expect it there
+window.React = React;
+// Fix: Cast to any to resolve mismatch between react-dom/client subset and full react-dom global type
+window.ReactDOM = ReactDOM as any;
 
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
+const initApp = () => {
+  const container = document.getElementById('root');
+  if (!container) return;
+
+  const root = ReactDOM.createRoot(container);
+  root.render(
     <AuthProvider>
       <AppProvider>
         <App />
       </AppProvider>
     </AuthProvider>
-  </React.StrictMode>
-);
+  );
+};
+
+// Start application
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
