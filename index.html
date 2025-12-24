@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +17,9 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
   
   <script>
+    // Shim for libraries that expect a Node-like environment
+    window.process = { env: { NODE_ENV: 'production' } };
+    
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -43,21 +47,32 @@
       "react-dom": "https://esm.sh/react-dom@18.2.0",
       "react-dom/": "https://esm.sh/react-dom@18.2.0/",
       "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-      "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+      "recharts": "https://esm.sh/recharts@2.12.7?bundle&external=react,react-dom"
     }
   }
   </script>
 </head>
 <body class="bg-slate-100 dark:bg-gray-900">
-  <div id="root"></div>
+  <div id="root">
+    <!-- Simple loading state before React mounts -->
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="text-center">
+        <div class="text-6xl animate-bounce">🩺</div>
+        <p class="mt-4 text-slate-500 font-medium">Loading Management Suite...</p>
+      </div>
+    </div>
+  </div>
 
-  <!-- Entry point: tell Babel to process index.tsx as a module -->
-  <script type="text/babel" data-type="module">
+  <!-- 
+    FIX: Removed 'env' from data-presets. 
+    Babel's 'env' preset often converts ESM (import) to CJS (require).
+    Removing it keeps the imports as standard ES Modules which the browser handles.
+  -->
+  <script type="text/babel" data-type="module" data-presets="react,typescript">
     import "./index.tsx";
   </script>
 
   <style>
-    #root:empty { display: none; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
   </style>
