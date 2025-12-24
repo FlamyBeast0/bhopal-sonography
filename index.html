@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,26 +10,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Babel Standalone: Translates TSX to JS in the browser -->
+  <!-- Babel Standalone for on-the-fly TSX transpilation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
   
   <script>
-    // 1. BROAD SHIMS: Fixes "require", "process", and "global" errors
+    // Robust environment shims
     window.global = window;
-    window.process = { 
-      env: { NODE_ENV: 'production' },
-      nextTick: (fn) => setTimeout(fn, 0)
-    };
+    window.process = { env: { NODE_ENV: 'production' } };
     window.exports = {};
     window.module = { exports: window.exports };
-    window.require = (n) => {
-      if (n === 'react') return window.React;
-      if (n === 'react-dom') return window.ReactDOM;
-      console.warn(`Module "${n}" requested via require(). Returning empty.`);
-      return {};
-    };
 
     tailwind.config = {
       darkMode: 'class',
@@ -52,17 +42,17 @@
   </script>
 
   <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom": "https://esm.sh/react-dom@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "recharts": "https://esm.sh/recharts@2.12.7?bundle&external=react,react-dom",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/"
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.2.0",
+      "react/": "https://esm.sh/react@18.2.0/",
+      "react-dom": "https://esm.sh/react-dom@18.2.0",
+      "react-dom/": "https://esm.sh/react-dom@18.2.0/",
+      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+      "recharts": "https://esm.sh/recharts@2.12.7?bundle&external=react,react-dom"
+    }
   }
-}
-</script>
+  </script>
 </head>
 <body class="bg-slate-100 dark:bg-gray-900 overflow-hidden">
   <div id="root">
@@ -70,21 +60,17 @@
       <div class="text-6xl animate-bounce">🩺</div>
       <div class="mt-6 text-center">
         <p class="text-xl font-bold text-slate-800 dark:text-white">Bhopal Sonography Center</p>
-        <p class="mt-2 text-slate-500 font-medium animate-pulse">Loading Management Suite...</p>
+        <p class="mt-2 text-slate-500 font-medium animate-pulse">Starting Management Suite...</p>
       </div>
     </div>
   </div>
 
-  <!-- 
-    CRITICAL: data-type="module" tells Babel NOT to transpile 'import' into 'require'.
-    This allows the browser's native module loader to use the importmap.
-  -->
+  <!-- CRITICAL: data-type="module" tells Babel to keep imports as ESM -->
   <script type="text/babel" data-type="module" src="index.tsx" data-presets="react,typescript"></script>
 
   <style>
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
-    
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
