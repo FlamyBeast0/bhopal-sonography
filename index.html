@@ -4,19 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bhopal Sonography Center</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Babel Standalone: Translates TSX to JS in the browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
-<script>
+  
+  <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
             primary: {
               300: 'var(--color-primary-300)',
@@ -26,51 +30,36 @@
               700: 'var(--color-primary-700)',
             },
           },
-          animation: {
-            'fade-in': 'fadeIn 0.5s ease-in-out',
-            'fade-in-up': 'fadeInUp 0.5s ease-in-out',
-            'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' },
-            },
-            fadeInUp: {
-              '0%': { opacity: '0', transform: 'translateY(10px)' },
-              '100%': { opacity: '1', transform: 'translateY(0)' },
-            },
-            pulseGlow: {
-              '0%, 100%': {
-                boxShadow: '0 0 15px -5px rgba(var(--color-primary-rgb), 0.5)',
-              },
-              '50%': {
-                boxShadow: '0 0 25px 5px rgba(var(--color-primary-rgb), 0.7)',
-              },
-            },
-          },
         },
       },
     }
   </script>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "react-dom": "https://esm.sh/react-dom@18.2.0",
-    "react/": "https://esm.sh/react@18.2.0/",
-    "react-dom/": "https://esm.sh/react-dom@18.2.0/",
-    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+
+  <script type="importmap">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.2.0",
+      "react/": "https://esm.sh/react@18.2.0/",
+      "react-dom": "https://esm.sh/react-dom@18.2.0",
+      "react-dom/": "https://esm.sh/react-dom@18.2.0/",
+      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+      "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+    }
   }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+  </script>
 </head>
 <body class="bg-slate-100 dark:bg-gray-900">
   <div id="root"></div>
-  <!-- REMOVED THE LEADING SLASH HERE -->
-  <script type="module" src="index.tsx"></script>
-<script type="module" src="/index.tsx"></script>
+
+  <!-- Entry point: tell Babel to process index.tsx as a module -->
+  <script type="text/babel" data-type="module">
+    import "./index.tsx";
+  </script>
+
+  <style>
+    #root:empty { display: none; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+  </style>
 </body>
 </html>
