@@ -17,9 +17,16 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
   
   <script>
-    // Shim for libraries that expect a Node-like environment
+    // CRITICAL SHIMS: Standardize environment for ESM and minified libraries
     window.process = { env: { NODE_ENV: 'production' } };
     
+    // Minimal require shim - only logs, doesn't interfere with ESM resolution
+    window.require = (name) => {
+      if (name === 'react') return window.React;
+      if (name === 'react-dom') return window.ReactDOM;
+      return undefined;
+    };
+
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -52,29 +59,31 @@
   }
   </script>
 </head>
-<body class="bg-slate-100 dark:bg-gray-900">
+<body class="bg-slate-100 dark:bg-gray-900 overflow-hidden">
   <div id="root">
-    <!-- Simple loading state before React mounts -->
     <div class="flex items-center justify-center min-h-screen">
       <div class="text-center">
         <div class="text-6xl animate-bounce">🩺</div>
-        <p class="mt-4 text-slate-500 font-medium">Loading Management Suite...</p>
+        <p class="mt-4 text-slate-500 font-medium animate-pulse">Initializing Management Suite...</p>
       </div>
     </div>
   </div>
 
   <!-- 
-    FIX: Removed 'env' from data-presets. 
-    Babel's 'env' preset often converts ESM (import) to CJS (require).
-    Removing it keeps the imports as standard ES Modules which the browser handles.
+    Load index.tsx via Babel. 
+    The browser will fetch it, Babel will transpile it, and the importmap will resolve modules.
   -->
-  <script type="text/babel" data-type="module" data-presets="react,typescript">
-    import "./index.tsx";
-  </script>
+  <script type="text/babel" src="index.tsx" data-presets="react,typescript"></script>
 
   <style>
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
+    
+    /* Global scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
   </style>
 </body>
 </html>
