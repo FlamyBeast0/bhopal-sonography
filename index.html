@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Babel Standalone for on-the-fly TSX transpilation -->
+  <!-- Babel Standalone for browser transpilation -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
@@ -18,7 +19,10 @@
   <script>
     // Robust environment shims
     window.global = window;
-    window.process = { env: { NODE_ENV: 'production' } };
+    window.process = { 
+      env: { NODE_ENV: 'production' },
+      nextTick: (fn) => setTimeout(fn, 0)
+    };
     window.exports = {};
     window.module = { exports: window.exports };
 
@@ -60,12 +64,12 @@
       <div class="text-6xl animate-bounce">🩺</div>
       <div class="mt-6 text-center">
         <p class="text-xl font-bold text-slate-800 dark:text-white">Bhopal Sonography Center</p>
-        <p class="mt-2 text-slate-500 font-medium animate-pulse">Starting Management Suite...</p>
+        <p class="mt-2 text-slate-500 font-medium animate-pulse">Launching Management Suite...</p>
       </div>
     </div>
   </div>
 
-  <!-- CRITICAL: data-type="module" tells Babel to keep imports as ESM -->
+  <!-- data-type="module" is critical for Babel to support imports properly in the browser -->
   <script type="text/babel" data-type="module" src="index.tsx" data-presets="react,typescript"></script>
 
   <style>
