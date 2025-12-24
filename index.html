@@ -10,13 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Babel Standalone for browser transpilation -->
+  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
   
   <script>
-    // Robust environment shims
     window.global = window;
     window.process = { 
       env: { NODE_ENV: 'production' },
@@ -47,11 +46,10 @@
     "imports": {
       "react": "https://esm.sh/react@18.2.0",
       "react/": "https://esm.sh/react@18.2.0/",
-      "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
-      "react-dom": "https://esm.sh/react-dom@18.2.0",
+      "react-dom": "https://esm.sh/react-dom@18.2.0?deps=react@18.2.0",
       "react-dom/": "https://esm.sh/react-dom@18.2.0/",
-      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-      "recharts": "https://esm.sh/recharts@2.12.7?bundle&external=react,react-dom"
+      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0",
+      "recharts": "https://esm.sh/recharts@2.12.7?deps=react@18.2.0,react-dom@18.2.0"
     }
   }
   </script>
@@ -62,13 +60,17 @@
       <div class="text-6xl animate-bounce">🩺</div>
       <div class="mt-6 text-center">
         <p class="text-xl font-bold text-slate-800 dark:text-white">Bhopal Sonography Center</p>
-        <p class="mt-2 text-slate-500 font-medium animate-pulse">Launching Management Suite...</p>
+        <p class="mt-2 text-slate-500 font-medium animate-pulse">Establishing Secure Session...</p>
       </div>
     </div>
   </div>
 
-  <!-- data-type="module" is critical for Babel to support imports properly in the browser -->
-  <script type="text/babel" data-type="module" src="index.tsx" data-presets="react,typescript"></script>
+  <script 
+    type="text/babel" 
+    data-type="module" 
+    src="index.tsx" 
+    data-presets="typescript,react"
+  ></script>
 
   <style>
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
