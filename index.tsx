@@ -4,7 +4,7 @@ import App from './App.tsx';
 import { AppProvider } from './context/AppContext.tsx';
 import AuthProvider from './context/AuthContext.tsx';
 
-// Register for global compatibility
+// Ensure React is globally available
 window.React = React;
 
 const startApp = () => {
@@ -14,21 +14,19 @@ const startApp = () => {
   try {
     const root = ReactDOM.createRoot(container);
     root.render(
-      <React.StrictMode>
-        <AuthProvider>
-          <AppProvider>
-            <App />
-          </AppProvider>
-        </AuthProvider>
-      </React.StrictMode>
+      <AuthProvider>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </AuthProvider>
     );
-    console.log("Clinic Management Suite successfully started.");
+    console.log("Clinic Management Suite successfully initialized.");
   } catch (error) {
-    console.error("Critical Error during React initialization:", error);
+    console.error("Critical error during application mount:", error);
   }
 };
 
-// Handle mounting when ready
+// Mount when DOM is ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   startApp();
 } else {
