@@ -1,32 +1,43 @@
+
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOMClient from 'react-dom/client';
 import App from './App.tsx';
 import { AppProvider } from './context/AppContext.tsx';
 import AuthProvider from './context/AuthContext.tsx';
 
-// Register for global compatibility
+// Set globals for library compatibility
 window.React = React;
-window.ReactDOM = ReactDOM as any;
+// Some older libraries expect the full ReactDOM object on the global
+const ReactDOMShim = {
+  createRoot: ReactDOMClient.createRoot,
+  hydrateRoot: ReactDOMClient.hydrateRoot
+};
+window.ReactDOM = ReactDOMShim as any;
 
-const mountApp = () => {
+const startApp = () => {
   const container = document.getElementById('root');
   if (!container) return;
 
-  const root = ReactDOM.createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <AuthProvider>
-        <AppProvider>
-          <App />
-        </AppProvider>
-      </AuthProvider>
-    </React.StrictMode>
-  );
+  try {
+    const root = ReactDOMClient.createRoot(container);
+    root.render(
+      <React.StrictMode>
+        <AuthProvider>
+          <AppProvider>
+            <App />
+          </AppProvider>
+        </AuthProvider>
+      </React.StrictMode>
+    );
+    console.log("Clinic Management Suite Initialized.");
+  } catch (error) {
+    console.error("Failed to mount React application:", error);
+  }
 };
 
-// Handle mounting when ready
+// Mount when DOM is ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  mountApp();
+  startApp();
 } else {
-  document.addEventListener('DOMContentLoaded', mountApp);
+  document.addEventListener('DOMContentLoaded', startApp);
 }
