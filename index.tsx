@@ -4,7 +4,7 @@ import App from './App.tsx';
 import { AppProvider } from './context/AppContext.tsx';
 import AuthProvider from './context/AuthContext.tsx';
 
-// Ensure React is globally available
+// Set global React instance to help avoid multiple-version conflicts
 window.React = React;
 
 const startApp = () => {
@@ -20,13 +20,17 @@ const startApp = () => {
         </AppProvider>
       </AuthProvider>
     );
-    console.log("Clinic Management Suite successfully initialized.");
+    console.log("Application mounted successfully.");
   } catch (error) {
-    console.error("Critical error during application mount:", error);
+    console.error("Critical mount error:", error);
+    container.innerHTML = `<div style="padding: 20px; color: red; font-family: sans-serif;">
+      <h2>Application Error</h2>
+      <p>${error.message}</p>
+      <button onclick="window.location.reload()" style="padding: 8px 16px; cursor: pointer;">Refresh Page</button>
+    </div>`;
   }
 };
 
-// Mount when DOM is ready
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   startApp();
 } else {
