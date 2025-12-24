@@ -17,14 +17,19 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
   
   <script>
-    // CRITICAL SHIMS: Standardize environment for ESM and minified libraries
-    window.process = { env: { NODE_ENV: 'production' } };
-    
-    // Minimal require shim - only logs, doesn't interfere with ESM resolution
-    window.require = (name) => {
-      if (name === 'react') return window.React;
-      if (name === 'react-dom') return window.ReactDOM;
-      return undefined;
+    // 1. BROAD SHIMS: Fixes "require", "process", and "global" errors
+    window.global = window;
+    window.process = { 
+      env: { NODE_ENV: 'production' },
+      nextTick: (fn) => setTimeout(fn, 0)
+    };
+    window.exports = {};
+    window.module = { exports: window.exports };
+    window.require = (n) => {
+      if (n === 'react') return window.React;
+      if (n === 'react-dom') return window.ReactDOM;
+      console.warn(`Module "${n}" requested via require(). Returning empty.`);
+      return {};
     };
 
     tailwind.config = {
@@ -47,39 +52,39 @@
   </script>
 
   <script type="importmap">
-  {
-    "imports": {
-      "react": "https://esm.sh/react@18.2.0",
-      "react/": "https://esm.sh/react@18.2.0/",
-      "react-dom": "https://esm.sh/react-dom@18.2.0",
-      "react-dom/": "https://esm.sh/react-dom@18.2.0/",
-      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-      "recharts": "https://esm.sh/recharts@2.12.7?bundle&external=react,react-dom"
-    }
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "recharts": "https://esm.sh/recharts@2.12.7?bundle&external=react,react-dom",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
-  </script>
+}
+</script>
 </head>
 <body class="bg-slate-100 dark:bg-gray-900 overflow-hidden">
   <div id="root">
-    <div class="flex items-center justify-center min-h-screen">
-      <div class="text-center">
-        <div class="text-6xl animate-bounce">🩺</div>
-        <p class="mt-4 text-slate-500 font-medium animate-pulse">Initializing Management Suite...</p>
+    <div class="flex flex-col items-center justify-center min-h-screen">
+      <div class="text-6xl animate-bounce">🩺</div>
+      <div class="mt-6 text-center">
+        <p class="text-xl font-bold text-slate-800 dark:text-white">Bhopal Sonography Center</p>
+        <p class="mt-2 text-slate-500 font-medium animate-pulse">Loading Management Suite...</p>
       </div>
     </div>
   </div>
 
   <!-- 
-    Load index.tsx via Babel. 
-    The browser will fetch it, Babel will transpile it, and the importmap will resolve modules.
+    CRITICAL: data-type="module" tells Babel NOT to transpile 'import' into 'require'.
+    This allows the browser's native module loader to use the importmap.
   -->
-  <script type="text/babel" src="index.tsx" data-presets="react,typescript"></script>
+  <script type="text/babel" data-type="module" src="index.tsx" data-presets="react,typescript"></script>
 
   <style>
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
     
-    /* Global scrollbar styling */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
